@@ -8,15 +8,15 @@ use eyre::{Ok, Result};
 
 #[derive(Args)]
 pub struct BalanceArgs {
-    pub address: Address,
+    /// The address to get the balance of.
+    address: Address,
 }
 
 #[tokio::main(flavor = "current_thread")]
-pub async fn get_balance(options: &BalanceArgs) -> Result<()> {
-    let rpc_url: Url = "https://eth.merkle.io".parse().expect("Error");
+pub async fn get_balance(args: &BalanceArgs, rpc_url: Url) -> Result<()> {
     let provider = ProviderBuilder::new().on_http(rpc_url);
 
-    let balance = provider.get_balance(options.address).await?;
+    let balance = provider.get_balance(args.address).await?;
     println!("Balance: {:?}", balance);
 
     Ok(())

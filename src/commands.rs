@@ -3,13 +3,17 @@ pub mod block;
 pub mod transfer;
 
 use balance::BalanceArgs;
-use block::BlockArgs;
 use clap::Subcommand;
-use transfer::TransferArgs; // Import the TransferArgs struct
+use transfer::TransferArgs;
 
 #[derive(Subcommand)]
 pub enum Commands {
-    Block(BlockArgs),
-    Transfer(TransferArgs), // Update to use structured TransferArgs
+    /// Get block number
+    Block,
+
+    /// Transfer ETH
+    Transfer(TransferArgs),
+
+    /// Get balance of an address
     Balance(BalanceArgs),
 }

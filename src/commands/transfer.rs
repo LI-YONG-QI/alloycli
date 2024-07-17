@@ -1,7 +1,8 @@
 use alloy::{
-    network::{EthereumWallet, NetworkWallet},
-    primitives::address,
-    providers::{fillers::WalletFiller, Provider, ProviderBuilder},
+    network::EthereumWallet,
+    primitives::{Address, U256},
+    providers::{Provider, ProviderBuilder},
+    rpc::types::TransactionRequest,
     signers::local::PrivateKeySigner,
     transports::http::reqwest::Url,
 };
@@ -10,33 +11,40 @@ use eyre::Result;
 
 #[derive(Args)]
 pub struct TransferArgs {
+    /// Private key of sender
     signer: PrivateKeySigner,
+
+    /// Address of recipient
+    to: Address,
 }
 
 #[tokio::main(flavor = "current_thread")]
-pub async fn transfer(options: &TransferArgs) -> Result<()> {
-    let wallet = EthereumWallet::from(options.signer.clone());
-    println!("{:?}", wallet);
-
-    let rpc_url: Url = match "https://eth.merkle.io".parse() {
-        Ok(n) => n,
-        Err(_e) => panic!("Error"),
-    };
-
+pub async fn transfer(args: &TransferArgs, rpc_url: Url) -> Result<()> {
+    let wallet = EthereumWallet::from(args.signer.clone());
+    // Sepolia provider
     let provider = ProviderBuilder::new()
         .with_recommended_fillers()
         .wallet(wallet)
         .on_http(rpc_url);
 
-    // let balance = provider
-    //     .get_balance(address!("056703bb4E0866909E1767D9b079237D1C44962f"))
-    //     .await?;
+    let tx = TransactionRequest::default()
+        .to(args.to)
+        .value(U256::from(100));
 
-    println!("get account");
-
-    let poller = provider.watch_blocks().await?;
-
-    //println!("{:?}", wallet.default_signer_address());
+    // Send the transaction and listen for the transaction to be included.
+    match provider.send_transaction(tx).await {
+        Ok(receipt) => match receipt.watch().await {
+            Ok(tx_hash) => {
+                println!("Transaction successful: {:?}", tx_hash);
+            }
+            Err(e) => {
+                println!("Transaction not confirmed: {:?}", e);
+            }
+        },
+        Err(e) => {
+            println!("Transaction send failed: {:?}", e);
+        }
+    };
 
     Ok(())
 }
