@@ -24,7 +24,7 @@ struct Cli {
 fn main() {
     // Set up the HTTP transport which is consumed by the RPC client.
     let cli = Cli::parse();
-    let rpc_url = get_url(true);
+    let rpc_url = get_url(cli.mainnet);
 
     match &cli.commands {
         Commands::Block => get_number(rpc_url),
