@@ -4,7 +4,6 @@ use alloy::{
     transports::http::reqwest::Url,
 };
 use clap::Args;
-use eyre::{Ok, Result};
 
 #[derive(Args)]
 pub struct BalanceArgs {
@@ -13,11 +12,11 @@ pub struct BalanceArgs {
 }
 
 #[tokio::main(flavor = "current_thread")]
-pub async fn get_balance(args: &BalanceArgs, rpc_url: Url) -> Result<()> {
+pub async fn get_balance(args: &BalanceArgs, rpc_url: Url) {
     let provider = ProviderBuilder::new().on_http(rpc_url);
 
-    let balance = provider.get_balance(args.address).await?;
-    println!("Balance: {:?}", balance);
-
-    Ok(())
+    match provider.get_balance(args.address).await {
+        Ok(balance) => println!("Balance: {:?}", balance),
+        Err(e) => eprintln!("Error: {:?}", e),
+    }
 }

@@ -7,7 +7,6 @@ use alloy::{
     transports::http::reqwest::Url,
 };
 use clap::Args;
-use eyre::Result;
 
 #[derive(Args)]
 pub struct TransferArgs {
@@ -19,7 +18,7 @@ pub struct TransferArgs {
 }
 
 #[tokio::main(flavor = "current_thread")]
-pub async fn transfer(args: &TransferArgs, rpc_url: Url) -> Result<()> {
+pub async fn transfer(args: &TransferArgs, rpc_url: Url) {
     let wallet = EthereumWallet::from(args.signer.clone());
     // Sepolia provider
     let provider = ProviderBuilder::new()
@@ -44,7 +43,5 @@ pub async fn transfer(args: &TransferArgs, rpc_url: Url) -> Result<()> {
         Err(e) => {
             println!("Transaction send failed: {:?}", e);
         }
-    };
-
-    Ok(())
+    }
 }
