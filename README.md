@@ -1,9 +1,16 @@
-# Alloy Cli Demo
+# Alloy CLI Demo
 
 build by:
 
-- alloy
-- clap
+- [alloy](https://crates.io/crates/alloy)
+- [clap](https://crates.io/crates/clap)
+
+## Features
+
+Available commands:
+
+- `block`: get block number
+- `balance`: get balance of address
 
 ## How to start ?
 
