@@ -1,7 +1,10 @@
 [package]
 name = "alloycli"
+license = "MIT"
 version = "0.1.0"
+description = "A CLI tool build by alloy"
 edition = "2021"
+repository = "https://github.com/LI-YONG-QI/alloy_cli"
 
 
 [dependencies]
