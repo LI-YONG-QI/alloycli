@@ -14,9 +14,6 @@ struct Cli {
     #[arg(short, long)]
     mainnet: bool,
 
-    #[arg(short, long, default_value_t = 100000u32)]
-    amount: u32,
-
     #[command(subcommand)]
     commands: Commands,
 }
