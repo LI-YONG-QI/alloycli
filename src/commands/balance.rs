@@ -11,6 +11,8 @@ pub struct BalanceArgs {
     address: Address,
 }
 
+// balance function
+
 #[tokio::main(flavor = "current_thread")]
 pub async fn get_balance(args: &BalanceArgs, rpc_url: Url) {
     let provider = ProviderBuilder::new().on_http(rpc_url);

@@ -1,5 +1,5 @@
 use alloy::{
-    network::EthereumWallet,
+    network::{EthereumWallet, TransactionBuilder},
     primitives::{Address, U256},
     providers::{Provider, ProviderBuilder},
     rpc::types::TransactionRequest,
@@ -30,7 +30,9 @@ pub async fn transfer(args: &TransferArgs, rpc_url: Url) {
         .wallet(wallet)
         .on_http(rpc_url);
 
-    let tx = TransactionRequest::default().to(args.to).value(args.amount);
+    let tx = TransactionRequest::default()
+        .to(args.to)
+        .with_value(args.amount);
 
     // Send the transaction and listen for the transaction to be included.
     match provider.send_transaction(tx).await {
